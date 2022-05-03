@@ -1,29 +1,35 @@
-abstract class BaseServer {
-    protected port: number;
-    protected address: string;
+
+
+export interface IServer {
+    startServer(): void
+    stopServer(): void
+}
+
+class Server implements IServer{
+    public port: number;
+    public address: string;
+    public date: string = '';
 
     constructor(port: number, address: string) {
         this.port = port;
         this.address = address;
+        // this.date = ''
     }
 
-    startServer() {
+    async startServer() {
+        const data = await this.getData();
         console.log(`Starting server at : ${this.address}: ${this.port}`)
+        return function(){
+            // this.date = 5;
+        }
     }
 
-    abstract stopServer(): void
-}
+    stopServer(): void {}
 
-class DbServer extends BaseServer {
-    stopServer(): void {
-        console.log('stopping server');
-    };
-
-    constructor(port: number, address: string) {
-        super(port, address);
-        console.log('calling db server constructor')
+    async getData(): Promise<string> {
+        return 'data';
     }
 }
 
-const someServer = new DbServer(8080, 'localhost');
+const someServer: IServer = new Server(8080, 'localhost');
 someServer.startServer();
